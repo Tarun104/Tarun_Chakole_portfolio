@@ -697,6 +697,143 @@
             box-shadow: 0 4px 15px rgba(36, 95, 222, 0.4);
         }
 
+        /* --- SCROLL ANIMATIONS --- */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ANIMATED COUNTER --- */
+        .stat-counter {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+        }
+
+        /* --- TIMELINE --- */
+        .experience-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -10.5px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover::before {
+            transform: scale(1.3);
+            box-shadow: 0 0 0 6px rgba(30, 64, 175, 0.2);
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-content {
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.15);
+        }
+
+        /* --- GRADIENT TEXT --- */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- ENHANCED SKILL ITEM WITH PROGRESS --- */
+        .skill-progress {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .skill-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            width: 0;
+            transition: width 0.8s ease;
+        }
+
+        .skill-item.show .skill-progress-bar {
+            width: 85%;
+        }
+
+        /* --- BADGE ANIMATIONS --- */
+        .badge-pulse {
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        /* --- ENHANCED SECTION SEPARATOR --- */
+        .section-separator {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            margin: 2rem 0;
+        }
+
+        /* --- CARD ENTRANCE ANIMATION --- */
+        .card-entrance {
+            animation: cardEnter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* --- GLOW EFFECT --- */
+        .glow-box {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .glow-box:hover {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.5rem; }
@@ -735,122 +872,164 @@
                 <img src="https://i.postimg.cc/vHB5Pg91/B612-20231118-192639-629-(1)-jpg.jpg" alt="Tarun Chakole" class="profile-pic">
             </div>
             <div class="hero-content">
-                <h1>Hi, I'm Tarun Chakole</h1>
+                <h1>Hi, I'm <span class="gradient-text">Tarun Chakole</span></h1>
                 <h2>Data Analyst | Python • SQL • Power BI</h2>
-                <p>Turning Data into Business Insights</p>
-                <a href="#contact" class="btn-resume">Get in Touch</a>
+                <p style="font-size: 1.2rem; opacity: 0.95; margin-bottom: 2.5rem;">Transforming raw data into strategic business intelligence that drives growth and innovation</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="#contact" class="btn-resume">Start a Project</a>
+                    <a href="#projects" class="btn-resume" style="background: transparent; border: 2px solid white; color: white;">See My Work</a>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- ABOUT SECTION -->
-    <section id="about" class="about">
-        <div class="about-text">
+    <section id="about" class="about fade-in-up">
+        <div class="about-text fade-in-up">
             <h2 class="section-title">About Me</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">I am a dedicated Data Analyst with a proven ability to transform raw data into actionable business intelligence. As a fresher, I bring fresh perspectives and strong technical foundations to every project I undertake.</p>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.8;">I'm a passionate Data Analyst with a talent for transforming complex datasets into compelling visual stories. My mission is to help organizations unlock the hidden potential in their data and make smarter, data-driven decisions that accelerate growth.</p>
             
-            <div class="about-highlights">
-                <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 1.2rem;">Core Competencies</h3>
+            <div class="about-highlights glow-box">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 1.2rem;">🎯 Core Competencies</h3>
                 <ul>
-                    <li><strong>Data Analysis & Visualization:</strong> Creating insightful dashboards and reports using Power BI and Excel</li>
-                    <li><strong>Database Management:</strong> Writing optimized SQL queries for data extraction and analysis</li>
-                    <li><strong>Programming:</strong> Developing Python scripts for data processing and automation</li>
-                    <li><strong>Analytical Thinking:</strong> Identifying patterns and trends to support strategic decision-making</li>
+                    <li><strong>📊 Data Analysis & Visualization:</strong> Creating insightful, interactive dashboards using Power BI and Excel that tell compelling stories</li>
+                    <li><strong>🗄️ Database Management:</strong> Writing optimized, performant SQL queries for efficient data extraction and complex analysis</li>
+                    <li><strong>🐍 Programming & Automation:</strong> Developing robust Python scripts for data processing, analysis workflows, and automation</li>
+                    <li><strong>💡 Strategic Insights:</strong> Identifying patterns, trends, and anomalies that unlock actionable business intelligence</li>
+                    <li><strong>🤝 Cross-functional Collaboration:</strong> Translating technical analysis into business recommendations for stakeholders</li>
                 </ul>
             </div>
         </div>
-        <div class="about-stats">
-            <div class="stat-card">
-                <h3>5+</h3>
-                <p>Projects Completed</p>
+        <div class="about-stats fade-in-up">
+            <div class="stat-card card-entrance" style="animation-delay: 0.1s;">
+                <h3 class="stat-counter">5+</h3>
+                <p>Data Projects</p>
             </div>
-            <div class="stat-card">
-                <h3>6</h3>
-                <p>Technical Skills</p>
+            <div class="stat-card card-entrance" style="animation-delay: 0.2s;">
+                <h3 class="stat-counter">6</h3>
+                <p>Core Skills</p>
             </div>
-            <div class="stat-card">
-                <h3>15+</h3>
-                <p>Data Insights Generated</p>
+            <div class="stat-card card-entrance" style="animation-delay: 0.3s;">
+                <h3 class="stat-counter">3+</h3>
+                <p>Certifications</p>
             </div>
-            <div class="stat-card">
-                <h3>3+</h3>
-                <p>Professional Certifications</p>
+            <div class="stat-card card-entrance" style="animation-delay: 0.4s;">
+                <h3 class="stat-counter">100%</h3>
+                <p>Dedication</p>
             </div>
         </div>
     </section>
 
     <!-- SKILLS SECTION -->
-    <section id="skills" class="skills">
-        <h2 class="section-title">Technical Skills</h2>
+    <section id="skills" class="skills fade-in-up">
+        <h2 class="section-title">Technical Expertise</h2>
+        <p style="text-align: center; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">A diverse toolkit of technologies and methodologies to extract, analyze, and visualize data</p>
         <div class="skills-grid">
-            <div class="skill-item">
+            <div class="skill-item card-entrance glow-box" style="animation-delay: 0.1s;">
                 <img src="https://cdn.simpleicons.org/python" alt="Python" class="skill-icon">
                 <p>Python</p>
+                <div class="skill-progress">
+                    <div class="skill-progress-bar"></div>
+                </div>
             </div>
-            <div class="skill-item">
+            <div class="skill-item card-entrance glow-box" style="animation-delay: 0.2s;">
                 <img src="https://cdn.simpleicons.org/mysql" alt="SQL" class="skill-icon">
                 <p>SQL</p>
+                <div class="skill-progress">
+                    <div class="skill-progress-bar"></div>
+                </div>
             </div>
-            <div class="skill-item">
+            <div class="skill-item card-entrance glow-box" style="animation-delay: 0.3s;">
                 <img src="https://i.postimg.cc/bJ5SWL1S/power-bi.jpg" alt="Power BI" class="skill-icon">
                 <p>Power BI</p>
+                <div class="skill-progress">
+                    <div class="skill-progress-bar"></div>
+                </div>
             </div>
-            <div class="skill-item">
+            <div class="skill-item card-entrance glow-box" style="animation-delay: 0.4s;">
                 <img src="https://i.postimg.cc/dtrnRTKf/exel.png" alt="Excel" class="skill-icon">
                 <p>Excel</p>
+                <div class="skill-progress">
+                    <div class="skill-progress-bar"></div>
+                </div>
             </div>
-            <div class="skill-item">
+            <div class="skill-item card-entrance glow-box" style="animation-delay: 0.5s;">
                 <img src="https://cdn.simpleicons.org/pandas" alt="Pandas" class="skill-icon">
                 <p>Pandas</p>
+                <div class="skill-progress">
+                    <div class="skill-progress-bar"></div>
+                </div>
             </div>
-            <div class="skill-item">
+            <div class="skill-item card-entrance glow-box" style="animation-delay: 0.6s;">
                 <img src="https://cdn.simpleicons.org/numpy" alt="NumPy" class="skill-icon">
                 <p>NumPy</p>
+                <div class="skill-progress">
+                    <div class="skill-progress-bar"></div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CERTIFICATIONS SECTION -->
-    <section id="certifications" class="certifications">
-        <h2 class="section-title">Certifications & Experience</h2>
+    <section id="certifications" class="certifications fade-in-up">
+        <h2 class="section-title">Certifications & Achievements</h2>
         <div class="certifications-grid">
-            <div class="certification-card">
+            <div class="certification-card card-entrance glow-box" style="animation-delay: 0.1s;">
                 <a href="https://www.linkedin.com/in/tarun-chakole/details/certifications/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-                    <h3>Data Science Internship</h3>
-                    <div class="issuer">Industry Experience</div>
-                    <div class="date">Completed</div>
-                    <p>Gained hands-on experience in data science, machine learning, and advanced analytics through a comprehensive internship program. Applied technical skills to real-world datasets and delivered data-driven solutions.</p>
-                    <div style="margin-top: 1rem; color: var(--primary-color); font-weight: bold; font-size: 0.9rem;">View Certificate →</div>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="font-size: 2rem;">🚀</span>
+                        <div>
+                            <h3 style="margin: 0;">Data Science Internship</h3>
+                            <div class="issuer">Industry Experience</div>
+                        </div>
+                    </div>
+                    <div class="date">✓ Completed</div>
+                    <p>Gained hands-on experience in data science, machine learning, and advanced analytics. Applied technical skills to real-world datasets and delivered impactful data-driven solutions for business challenges.</p>
+                    <div style="margin-top: 1rem; color: var(--primary-color); font-weight: bold; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;">View <i class="fas fa-arrow-right"></i></div>
                 </a>
             </div>
-            <div class="certification-card">
+            <div class="certification-card card-entrance glow-box" style="animation-delay: 0.2s;">
                 <a href="https://www.linkedin.com/in/tarun-chakole/details/certifications/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-                    <h3>Business Intelligence</h3>
-                    <div class="issuer">NPTEL - IIT</div>
-                    <div class="date">Completed</div>
-                    <p>Successfully completed NPTEL certification in Business Intelligence, covering advanced concepts in BI tools, data warehousing, ETL processes, and dashboard development for strategic decision-making.</p>
-                    <div style="margin-top: 1rem; color: var(--primary-color); font-weight: bold; font-size: 0.9rem;">View Certificate →</div>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="font-size: 2rem;">📊</span>
+                        <div>
+                            <h3 style="margin: 0;">Business Intelligence</h3>
+                            <div class="issuer">NPTEL - IIT</div>
+                        </div>
+                    </div>
+                    <div class="date">✓ Completed</div>
+                    <p>Mastered advanced BI tools, data warehousing, and ETL processes. Specialized in dashboard development and strategic decision-making frameworks for enterprise-level analytics.</p>
+                    <div style="margin-top: 1rem; color: var(--primary-color); font-weight: bold; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;">View <i class="fas fa-arrow-right"></i></div>
                 </a>
             </div>
-            <div class="certification-card">
+            <div class="certification-card card-entrance glow-box" style="animation-delay: 0.3s;">
                 <a href="https://www.linkedin.com/in/tarun-chakole/details/certifications/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-                    <h3>Internet of Things</h3>
-                    <div class="issuer">NPTEL - IIT</div>
-                    <div class="date">Completed</div>
-                    <p>Completed NPTEL certification in Internet of Things (IoT), gaining expertise in IoT architecture, sensor networks, data collection, and IoT applications in modern business environments.</p>
-                    <div style="margin-top: 1rem; color: var(--primary-color); font-weight: bold; font-size: 0.9rem;">View Certificate →</div>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="font-size: 2rem;">🔌</span>
+                        <div>
+                            <h3 style="margin: 0;">Internet of Things</h3>
+                            <div class="issuer">NPTEL - IIT</div>
+                        </div>
+                    </div>
+                    <div class="date">✓ Completed</div>
+                    <p>Achieved expertise in IoT architecture, sensor networks, and data collection systems. Explored practical IoT applications in modern business environments and analytics.</p>
+                    <div style="margin-top: 1rem; color: var(--primary-color); font-weight: bold; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;">View <i class="fas fa-arrow-right"></i></div>
                 </a>
             </div>
         </div>
     </section>
 
     <!-- PROJECTS SECTION -->
-    <section id="projects">
+    <section id="projects" class="fade-in-up">
         <h2 class="section-title">Featured Projects</h2>
+        <p style="text-align: center; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">Showcasing practical applications of data analytics in solving real-world problems</p>
         <div class="projects-grid">
-            <div class="project-card">
-                <h3>Traffic Accident Data Analysis</h3>
-                <p>Comprehensive analysis of traffic accident data using Python, identifying patterns, risk factors, and safety insights through statistical analysis and data visualization.</p>
+            <div class="project-card card-entrance glow-box" style="animation-delay: 0.1s;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
+                    <span style="font-size: 1.8rem;">🚗</span>
+                    <h3 style="margin: 0;">Traffic Accident Analysis</h3>
+                </div>
+                <p>Advanced statistical analysis of traffic accident patterns using Python. Identified critical risk factors, spatial-temporal trends, and safety insights to inform policy recommendations.</p>
                 <div class="project-tech-stack">
                     <span class="tech-badge">Python</span>
                     <span class="tech-badge">Pandas</span>
@@ -861,9 +1040,12 @@
                     <i class="fab fa-github"></i> View on GitHub
                 </a>
             </div>
-            <div class="project-card">
-                <h3>Sentiment Pattern Visualization</h3>
-                <p>Advanced sentiment analysis project visualizing emotional patterns in text data using NLP techniques, machine learning algorithms, and interactive dashboards.</p>
+            <div class="project-card card-entrance glow-box" style="animation-delay: 0.2s;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
+                    <span style="font-size: 1.8rem;">💬</span>
+                    <h3 style="margin: 0;">Sentiment Pattern Visualization</h3>
+                </div>
+                <p>Deep-dive NLP project analyzing emotional patterns in text data. Built machine learning models to classify sentiments and created interactive visualizations for stakeholder insights.</p>
                 <div class="project-tech-stack">
                     <span class="tech-badge">NLP</span>
                     <span class="tech-badge">Python</span>
@@ -874,9 +1056,12 @@
                     <i class="fab fa-github"></i> View on GitHub
                 </a>
             </div>
-            <div class="project-card">
-                <h3>Data Cleaning & EDA</h3>
-                <p>Complete data preprocessing and exploratory data analysis project demonstrating best practices in data cleaning, feature engineering, and statistical analysis.</p>
+            <div class="project-card card-entrance glow-box" style="animation-delay: 0.3s;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
+                    <span style="font-size: 1.8rem;">🔍</span>
+                    <h3 style="margin: 0;">Data Cleaning & EDA</h3>
+                </div>
+                <p>End-to-end data preprocessing and exploratory analysis demonstrating industry best practices. Implemented data validation, feature engineering, and comprehensive statistical analysis.</p>
                 <div class="project-tech-stack">
                     <span class="tech-badge">Python</span>
                     <span class="tech-badge">Pandas</span>
@@ -891,40 +1076,40 @@
     </section>
 
     <!-- CONTACT SECTION -->
-    <section id="contact" class="contact">
+    <section id="contact" class="contact fade-in-up">
         <div class="contact-content">
-            <div class="contact-text">
-                <h2>Let's Create Something Amazing Together</h2>
-                <p>Ready to transform your data into powerful insights? Let's collaborate on your next data analytics project and turn challenges into opportunities.</p>
+            <div class="contact-text fade-in-up">
+                <h2 style="color: var(--secondary-color); font-size: 2.5rem; margin-bottom: 1.5rem;">Let's Create <span class="gradient-text">Something Incredible</span> Together</h2>
+                <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 2rem; color: var(--text-dark);">Whether you're looking for insights, dashboards, or data-driven strategies, I'm here to transform your challenges into opportunities. Let's collaborate and unlock the power of your data.</p>
 
                 <div class="contact-highlights">
-                    <div class="highlight-item">
+                    <div class="highlight-item card-entrance" style="animation-delay: 0.1s;">
                         <div class="highlight-icon">
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <div class="highlight-text">
                             <h4>Data Analysis & Visualization</h4>
-                            <p>Transform raw data into compelling visual stories</p>
+                            <p>Transform raw data into compelling, actionable visual stories</p>
                         </div>
                     </div>
 
-                    <div class="highlight-item">
+                    <div class="highlight-item card-entrance" style="animation-delay: 0.2s;">
                         <div class="highlight-icon">
                             <i class="fas fa-brain"></i>
                         </div>
                         <div class="highlight-text">
-                            <h4>Machine Learning Solutions</h4>
-                            <p>Build predictive models that drive business decisions</p>
+                            <h4>Predictive Analytics</h4>
+                            <p>Build intelligent models that forecast trends and drive decisions</p>
                         </div>
                     </div>
 
-                    <div class="highlight-item">
+                    <div class="highlight-item card-entrance" style="animation-delay: 0.3s;">
                         <div class="highlight-icon">
                             <i class="fas fa-database"></i>
                         </div>
                         <div class="highlight-text">
                             <h4>Database Optimization</h4>
-                            <p>Streamline data processes for maximum efficiency</p>
+                            <p>Streamline data infrastructure for speed and efficiency</p>
                         </div>
                     </div>
                 </div>
@@ -932,11 +1117,11 @@
                 <div class="contact-actions">
                     <a href="https://mail.google.com/mail/?view=cm&to=tarunchakole104@gmail.com" target="_blank" class="action-btn">
                         <i class="fas fa-envelope"></i>
-                        Start a Conversation
+                        Email Me
                     </a>
-                    <a href="#projects" class="action-btn" style="background: linear-gradient(135deg, #64748b, #475569);">
-                        <i class="fas fa-eye"></i>
-                        View My Work
+                    <a href="https://www.linkedin.com/in/tarun-chakole/" target="_blank" class="action-btn" style="background: linear-gradient(135deg, #0077b5, #0094d9);">
+                        <i class="fab fa-linkedin-in"></i>
+                        LinkedIn
                     </a>
                 </div>
             </div>
@@ -959,7 +1144,7 @@
                     <circle cx="200" cy="150" r="120" fill="url(#dataGradient)" opacity="0.1"/>
                     <circle cx="200" cy="150" r="80" fill="url(#dataGradient)" opacity="0.2"/>
 
-                    <!-- Data visualization elements -->
+                    <!-- Animated data bars -->
                     <rect x="160" y="120" width="80" height="8" fill="url(#dataGradient)" opacity="0.8"/>
                     <rect x="170" y="140" width="60" height="8" fill="url(#dataGradient)" opacity="0.6"/>
                     <rect x="180" y="160" width="40" height="8" fill="url(#dataGradient)" opacity="0.4"/>
@@ -979,15 +1164,18 @@
     <!-- FOOTER -->
     <footer>
         <div class="social-links">
-            <a href="https://www.linkedin.com/in/tarun-chakole/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+            <a href="https://www.linkedin.com/in/tarun-chakole/" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="badge-pulse">
                 <i class="fab fa-linkedin-in"></i>
             </a>
-            <a href="https://github.com/Tarun104" target="_blank" rel="noopener noreferrer" title="GitHub">
+            <a href="https://github.com/Tarun104" target="_blank" rel="noopener noreferrer" title="GitHub" class="badge-pulse">
                 <i class="fab fa-github"></i>
             </a>
+            <a href="https://mail.google.com/mail/?view=cm&to=tarunchakole104@gmail.com" target="_blank" title="Email" class="badge-pulse">
+                <i class="fas fa-envelope"></i>
+            </a>
         </div>
-        <p>&copy; 2023 Tarun Chakole. All rights reserved.</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Designed for Data Analysts</p>
+        <p style="font-size: 0.95rem; margin: 1.5rem 0 0.5rem;">© 2024 Tarun Chakole. All rights reserved.</p>
+        <p style="font-size: 0.8rem; color: #64748b;">Transforming Data into Insights • Driving Innovation</p>
     </footer>
 
     <script>
@@ -998,6 +1186,68 @@
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
+            });
+        });
+
+        // Scroll animation for fade-in elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+        document.querySelectorAll('.skill-item').forEach(el => observer.observe(el));
+
+        // Animated counter for stats
+        const animateCounters = () => {
+            const counters = document.querySelectorAll('.stat-counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.match(/\d+/)[0]);
+                const isPercentage = counter.textContent.includes('%');
+                let current = 0;
+                const increment = target / 30;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = isPercentage ? '100%' : target + '+';
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current) + (isPercentage ? '%' : '+');
+                    }
+                }, 50);
+            });
+        };
+
+        // Trigger counter animation on scroll
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    entry.target.dataset.animated = 'true';
+                    animateCounters();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) statsObserver.observe(aboutSection);
+
+        // Add hover glow effect on skill cards
+        document.querySelectorAll('.skill-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 0 30px rgba(59, 130, 246, 0.4), 0 20px 40px rgba(30, 41, 59, 0.15)';
+            });
+            item.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '0 4px 15px rgba(30, 41, 59, 0.08)';
             });
         });
     </script>
