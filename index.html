@@ -32,6 +32,8 @@
         body {
             line-height: 1.6;
             color: var(--text-dark);
+            padding-top: 80px;
+            background-color: var(--bg-light);
         }
 
         a { text-decoration: none; color: inherit; }
@@ -81,7 +83,8 @@
 
         /* --- HERO SECTION --- */
         .hero {
-            height: 100vh;
+            min-height: calc(100vh - 80px);
+            height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -90,7 +93,7 @@
             background-size: cover;
             background-position: center;
             color: var(--text-light);
-            padding: 0 1rem;
+            padding: 4rem 1rem 3rem;
         }
 
         .hero-container {
@@ -842,6 +845,8 @@
             .hero-container { flex-direction: column; gap: 2rem; }
             .profile-pic { width: 150px; height: 150px; }
             .hero-content { text-align: center; }
+            .hero { min-height: auto; padding-top: 5rem; padding-bottom: 3rem; }
+            .hero-container { gap: 1.5rem; }
             .contact-content { grid-template-columns: 1fr; gap: 2rem; }
             .contact-text { padding-right: 0; }
             .contact-actions { flex-direction: column; }
@@ -862,7 +867,7 @@
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <a href="TARUN_ANIL_CHAKOLE ( DATA_ANALYTICS).pdf" class="btn-resume" download>Download CV</a>
+<a href="Tarun_Chakole_CV.pdf" class="btn-resume" download="Tarun_Chakole_CV.pdf">Download CV</a>
     </nav>
 
     <!-- HERO SECTION -->
@@ -1070,6 +1075,22 @@
                 </div>
                 <a href="https://github.com/Tarun104/Data_Science_Project/blob/main/data_cleaning_and_EDA.ipynb" target="_blank" rel="noopener noreferrer" class="project-link">
                     <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+            <div class="project-card card-entrance glow-box" style="animation-delay: 0.4s;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
+                    <span style="font-size: 1.8rem;">🎯</span>
+                    <h3 style="margin: 0;">AI Career Path Finder</h3>
+                </div>
+                <p>Discover your ideal career domain with our intelligent recommendation system! Input your skills and get personalized career insights, match percentages, and skill gap analysis based on real job market data.</p>
+                <div class="project-tech-stack">
+                    <span class="tech-badge">AI-Powered</span>
+                    <span class="tech-badge">Data Analytics</span>
+                    <span class="tech-badge">Interactive</span>
+                    <span class="tech-badge">Real-time</span>
+                </div>
+                <a href="recommendation.html" class="project-link" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background-color: var(--primary-color); color: white; border-radius: 5px; font-weight: 600; transition: background 0.3s;">
+                    <i class="fas fa-rocket"></i> Try the Recommendation System
                 </a>
             </div>
         </div>
