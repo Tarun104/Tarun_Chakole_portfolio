@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Career Recommendation System | Tarun Chakole</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary-color: #1e40af; /* Deep Professional Blue */
+            --secondary-color: #1e293b; /* Sophisticated Navy */
+            --accent-color: #3b82f6; /* Refined Blue */
+            --text-light: #f8fafc;
+            --text-dark: #1e293b; /* Dark Navy for text */
+            --text-muted: #64748b; /* Muted gray for secondary text */
+            --bg-light: #ffffff;
+            --bg-off-white: #f8fafc; /* Very light gray */
+            --bg-gray-light: #f1f5f9; /* Light gray */
+            --bg-gray-medium: #e2e8f0; /* Medium gray */
+            --bg-elegant: #f8fafc; /* Elegant light background */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: var(--bg-light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .logo span { color: var(--primary-color); }
+
+        .nav-links { display: flex; gap: 2rem; }
+
+        .nav-links a {
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary-color); }
+
+        .btn-back {
+            padding: 0.5rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-back:hover { background-color: #1d4ed8; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.9)), url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--text-light);
+            padding: 0 1rem;
+            margin-top: 80px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- DASHBOARD --- */
+        .dashboard {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* --- DATASET --- */
+        .dataset {
+            background: var(--bg-off-white);
+            padding: 3rem 5%;
+            margin: 3rem 0;
+            border-radius: 10px;
+        }
+
+        .dataset h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .dataset table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .dataset th, .dataset td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-gray-medium);
+        }
+
+        .dataset th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .dataset tbody tr:hover {
+            background: var(--bg-gray-light);
+        }
+
+        /* --- RECOMMENDATION --- */
+        .recommendation {
+            background: var(--bg-light);
+            padding: 3rem 5%;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .recommendation h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .input-group {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--bg-gray-medium);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .analyze-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 0.75rem 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .analyze-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        #results {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .result-card {
+            background: var(--bg-off-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--bg-gray-medium);
+        }
+
+        .best-match {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .best-match h4 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem 5%;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo">Tarun <span>Chakole</span></div>
+        <div class="nav-links">
+            <a href="tarun_chakole.html">Back to Portfolio</a>
+        </div>
+        <a href="tarun_chakole.html" class="btn-back">← Back to Portfolio</a>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div>
+            <h1>Discover Your Perfect Career Path</h1>
+            <p>Try our AI-powered job recommendation system to find your ideal domain based on your skills. Get personalized career insights and skill gap analysis in seconds.</p>
+        </div>
+    </section>
+
+    <!-- DASHBOARD SECTION -->
+    <section>
+        <h2 class="section-title">Job Market Dashboard</h2>
+        <p class="section-subtitle">Explore comprehensive job market trends and analytics from our curated dataset</p>
+        <div class="dashboard">
+            <img src="Job_Market_Dashboard.png" alt="Job Market Dashboard">
+        </div>
+    </section>
+
+    <!-- DATASET SECTION -->
+    <section class="dataset">
+        <h3>Sample Dataset Preview</h3>
+        <p style="text-align: center; margin-bottom: 2rem; color: var(--text-muted);">Our system analyzes thousands of job listings across multiple domains to provide accurate recommendations</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Skills</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Data Analytics</td>
+                    <td>Business Analyst - Clinical & Logistics Platform</td>
+                    <td>Memorial Sloan-Kettering</td>
+                    <td>New York, NY</td>
+                    <td>$56K-$102K</td>
+                    <td>Excel, Communication, SQL, Tableau</td>
+                </tr>
+                <tr>
+                    <td>Software Development</td>
+                    <td>Software Engineer</td>
+                    <td>Tech Corp</td>
+                    <td>San Francisco, CA</td>
+                    <td>$80K-$120K</td>
+                    <td>Java, Python, SQL</td>
+                </tr>
+                <tr>
+                    <td>AI/ML</td>
+                    <td>Machine Learning Engineer</td>
+                    <td>AI Solutions</td>
+                    <td>Seattle, WA</td>
+                    <td>$90K-$140K</td>
+                    <td>Python, Deep Learning, AWS</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- RECOMMENDATION SECTION -->
+    <section class="recommendation">
+        <h3>Try the Recommendation System</h3>
+        <p style="text-align: center; margin-bottom: 2rem; color: var(--text-muted);">Enter your skills below to get personalized career recommendations</p>
+        <div class="input-group">
+            <label for="user-skills">Enter your skills (comma separated):</label>
+            <input type="text" id="user-skills" placeholder="e.g., python, sql, excel, communication">
+        </div>
+        <button class="analyze-btn" id="analyze-btn">Analyze My Skills</button>
+        <div id="results">
+            <div id="best-match" class="best-match"></div>
+            <div id="details"></div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2024 Tarun Chakole. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // Domain skills data
+        const domainSkills = {"Data Analytics": ["excel", "communication", "sql", "tableau", "python", "statistics", "aws", "java", "power bi", "machine learning"], "Software Development": ["java", "python"], "AI/ML": ["python", "sql", "statistics", "communication", "deep learning", "c++", "aws", "azure"]};
+
+        // Analyze function
+        function analyzeSkills() {
+            const input = document.getElementById('user-skills').value.toLowerCase();
+            const userSkills = input.split(',').map(s => s.trim()).filter(s => s);
+
+            if (userSkills.length === 0) {
+                alert('Please enter some skills.');
+                return;
+            }
+
+            const results = [];
+
+            for (const [domain, skills] of Object.entries(domainSkills)) {
+                const matched = [];
+                const missing = [];
+
+                for (const skill of skills) {
+                    if (userSkills.includes(skill)) {
+                        matched.push(skill);
+                    } else {
+                        missing.push(skill);
+                    }
+                }
+
+                const matchPercent = Math.round((matched.length / skills.length) * 100);
+
+                results.push({
+                    domain,
+                    matchPercent,
+                    matched,
+                    missing: missing.slice(0, 5)
+                });
+            }
+
+            results.sort((a, b) => b.matchPercent - a.matchPercent);
+
+            const best = results[0];
+
+            document.getElementById('best-match').innerHTML = `
+                <h4>🎯 Best Matching Domain: ${best.domain}</h4>
+                <p><strong>Match Percentage:</strong> ${best.matchPercent}%</p>
+                <p><strong>Matched Skills:</strong> ${best.matched.join(', ') || 'None'}</p>
+                <p><strong>Missing Skills (top 5):</strong> ${best.missing.join(', ') || 'None'}</p>
+            `;
+
+            let detailsHtml = '<h4 style="color: var(--secondary-color);">Other Domain Matches:</h4>';
+            for (let i = 1; i < results.length; i++) {
+                const r = results[i];
+                detailsHtml += `
+                    <div class="result-card">
+                        <strong>${r.domain}:</strong> ${r.matchPercent}% match
+                        <br><small>Matched: ${r.matched.slice(0, 3).join(', ') || 'None'}</small>
+                    </div>
+                `;
+            }
+
+            document.getElementById('details').innerHTML = detailsHtml;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        // Event listener
+        document.getElementById('analyze-btn').addEventListener('click', analyzeSkills);
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">c:\BLACKBOX\recommendation.html
