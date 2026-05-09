@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Studio ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdf6f0;
+            --sidebar-bg: #ffffff;
+            --primary: #ffb7b2; /* Pastel Pink */
+            --secondary: #b5ead7; /* Pastel Mint */
+            --accent: #c7ceea; /* Pastel Purple */
+            --text: #555555;
+            --shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .app-container {
+            display: flex;
+            background: var(--sidebar-bg);
+            width: 900px;
+            height: 600px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        /* Sidebar Controls */
+        .sidebar {
+            width: 300px;
+            padding: 30px;
+            background: #fff;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Inputs & Buttons */
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: none;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary { background: var(--primary); }
+        .btn-secondary { background: var(--secondary); color: #444; }
+        .btn-accent { background: var(--accent); }
+        .btn-danger { background: #ff9aa2; font-size: 0.8rem; padding: 8px; }
+
+        /* Sticker Grid */
+        .sticker-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .sticker-item {
+            font-size: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .sticker-item:hover {
+            background: #f0f0f0;
+        }
+
+        /* Canvas Area */
+        .canvas-area {
+            flex: 1;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        canvas {
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            cursor: crosshair;
+            border-radius: 4px;
+        }
+
+        /* Floating Action Button for Download */
+        .download-btn {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: var(--text);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            background: #333;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h1>Sticker Studio ✨</h1>
+            
+            <div class="control-group">
+                <label>Background Color</label>
+                <input type="color" id="bgColor" value="#ffffff">
+            </div>
+
+            <div class="control-group">
+                <label>Draw Color</label>
+                <input type="color" id="drawColor" value="#000000">
+            </div>
+
+            <div class="control-group">
+                <label>Brush Size</label>
+                <input type="range" id="brushSize" min="1" max="20" value="5">
+            </div>
+
+            <div class="control-group">
+                <label>Add Text</label>
+                <input type="text" id="textInput" placeholder="Type something funny...">
+                <button class="btn btn-primary" onclick="addText()">Add Text</button>
+            </div>
+
+            <div class="control-group">
+                <label>Quick Stickers</label>
+                <div class="sticker-grid" id="stickerGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Options</label>
+                <button class="btn btn-danger" onclick="clearCanvas()">Clear All</button>
+            </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="canvas-area">
+            <canvas id="stickerCanvas" width="500" height="500"></canvas>
+            
+            <button class="download-btn" onclick="downloadSticker()">
+                Download Sticker ⬇️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('stickerCanvas');
+        const ctx = canvas.getContext('2d');
+        const bgColorInput = document.getElementById('bgColor');
+        const drawColorInput = document.getElementById('drawColor');
+        const brushSizeInput = document.getElementById('brushSize');
+        const textInput = document.getElementById('textInput');
+        const stickerGrid = document.getElementById('stickerGrid');
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // 1. Initialize Canvas
+        function initCanvas() {
+            ctx.fillStyle = bgColorInput.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 2. Drawing Logic
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = getCoordinates(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const [x, y] = getCoordinates(e);
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = drawColorInput.value;
+            ctx.lineWidth = brushSizeInput.value;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            [lastX, lastY] = [x, y];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function getCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return [
+                (e.clientX - rect.left) * scaleX,
+                (e.clientY - rect.rect.top) * scaleY
+            ];
+        }
+
+        // 3. Add Text Logic
+        function addText() {
+            const text = textInput.value;
+            if (!text) return;
+
+            ctx.font = "bold 40px 'Fredoka', sans-serif";
+            ctx.fillStyle = drawColorInput.value;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            
+            // Add a white outline to text so it pops
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "white";
+            ctx.strokeText(text, canvas.width / 2, canvas.height / 2);
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            textInput.value = "";
+        }
+
+        // 4. Add Stickers (Emojis)
+        const emojis = ['😂', '😎', '🔥', '✨', '💩', '👻', '🍕', '🌈', '🦄', '💖', '👀', '🤔'];
+        
+        emojis.forEach(emoji => {
+            const div = document.createElement('div');
+            div.className = 'sticker-item';
+            div.innerText = emoji;
+            div.onclick = () => {
+                ctx.font = "80px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(emoji, canvas.width / 2, canvas.height / 2);
+            };
+            stickerGrid.appendChild(div);
+        });
+
+        // 5. Background Color Change
+        bgColorInput.addEventListener('change', (e) => {
+            ctx.fillStyle = e.target.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        // 6. Clear Canvas
+        function clearCanvas() {
+            ctx.fillStyle = bgColorInput.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 7. Download Function
+        function downloadSticker() {
+            const link = document.createElement('a');
+            link.download = 'my-funny-sticker.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Event Listeners for Drawing
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Initialize
+        initCanvas();
+
+    </script>
+</body>
+</html>
