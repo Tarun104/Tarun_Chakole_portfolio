@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Resume Analyzer & ATS System</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: white;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+      color: #38bdf8;
+    }
+
+    .hero p {
+      color: #cbd5e1;
+      font-size: 18px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .result-card {
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .format-tip {
+      margin-top: 1rem;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      color: #cbd5e1;
+      line-height: 1.6;
+      border: 1px solid rgba(148,163,184,0.18);
+    }
+
+    .format-tip a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .status-pass {
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    .status-fail {
+      color: #f87171;
+      font-weight: 700;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #e2e8f0;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: #334155;
+      color: white;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    button {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin-top: 10px;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: scale(1.01);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .metric-card {
+      background: #334155;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .metric-card h2 {
+      font-size: 34px;
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin-bottom: 15px;
+      color: #38bdf8;
+    }
+
+    .skills-box {
+      background: #334155;
+      padding: 15px;
+      border-radius: 12px;
+      line-height: 1.8;
+      color: #e2e8f0;
+    }
+
+    .matched {
+      border-left: 5px solid #22c55e;
+    }
+
+    .missing {
+      border-left: 5px solid #ef4444;
+    }
+
+    .summary {
+      background: #334155;
+      padding: 20px;
+      border-radius: 14px;
+      line-height: 1.8;
+      color: #e2e8f0;
+    }
+
+    .chart-wrapper {
+      width: 100%;
+      max-width: 340px;
+      margin: 20px auto 0;
+      padding: 12px;
+      background: white;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+    }
+
+    canvas {
+      width: 100%;
+      height: 300px;
+      border-radius: 10px;
+      display: block;
+      padding: 0;
+      background: transparent;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+      }
+
+      canvas {
+        max-width: 100%;
+        height: 280px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="hero">
+      <h1>📄 AI Resume Analyzer & ATS System</h1>
+      <p>
+        Upload your resume and compare it with job descriptions using
+        AI-powered ATS analysis.
+      </p>
+    </div>
+
+    <div class="card">
+
+      <div class="input-group">
+        <label>Upload Resume (PDF)</label>
+        <input type="file" id="resume" accept="application/pdf" />
+      </div>
+
+      <div class="input-group">
+        <label>Paste Job Description</label>
+        <textarea id="jobDescription" placeholder="Paste job description here..."></textarea>
+      </div>
+
+      <button onclick="analyzeResume()">Analyze Resume</button>
+
+    </div>
+
+    <div id="results" style="display:none;">
+
+      <div class="metrics">
+
+        <div class="metric-card">
+          <h2 id="score">0%</h2>
+          <p>Overall ATS Score</p>
+        </div>
+
+        <div class="metric-card">
+          <h2 id="formatScore">0%</h2>
+          <p>ATS Format Score</p>
+        </div>
+
+        <div class="metric-card">
+          <h2 id="matchedCount">0</h2>
+          <p>Matched Skills</p>
+        </div>
+
+        <div class="metric-card">
+          <h2 id="missingCount">0</h2>
+          <p>Missing Skills</p>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">🎯 Predicted Domain</h2>
+        <div class="summary" id="predictedDomain"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Extracted Skills</h2>
+        <div class="skills-box" id="skills"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Matched Skills</h2>
+        <div class="skills-box matched" id="matchedSkills"></div>
+      </div>
+
+      <div class="card result-card">
+        <h2 class="section-title">📄 ATS Format Check</h2>
+        <div class="summary" id="atsFormatResult"></div>
+        <div class="format-tip" id="atsFormatTip"></div>
+      </div>
+
+      <div class="card result-card">
+        <h2 class="section-title">❌ Missing Skills</h2>
+        <div class="skills-box missing" id="missingSkills"></div>
+      </div>
+
+      <div class="card result-card">
+        <h2 class="section-title">🚀 Improvement Suggestions</h2>
+        <div class="summary" id="suggestions"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📈 Skill Match Analysis</h2>
+        <div class="chart-wrapper">
+          <canvas id="chart"></canvas>
+        </div>
+      </div>
+
+      <button onclick="downloadPDF()">📥 Download ATS Report</button>
+
+    </div>
+
+    <div class="footer">
+      Built by Tarun Chakole • AI Resume Analyzer & ATS System
+    </div>
+
+  </div>
+
+  <script>
+
+    const skillsList = [
+      "python", "sql", "excel", "power bi", "tableau",
+      "machine learning", "data analysis", "communication",
+      "statistics", "aws", "azure", "java", "c++",
+      "deep learning", "streamlit", "pandas", "numpy",
+      "tensorflow", "pytorch", "javascript", "react",
+      "node.js", "html", "css", "mongodb", "docker",
+      "kubernetes", "linux", "ethical hacking",
+      "penetration testing", "cryptography", "jenkins",
+      "flutter", "dart", "android", "kotlin",
+      "firebase", "figma", "adobe xd", "wireframing",
+      "prototyping", "ui design", "ux research"
+    ];
+
+    const domainSkills = {
+      "Data Analytics": ["python", "sql", "excel", "power bi", "tableau", "statistics", "pandas", "numpy"],
+      "AI/ML": ["python", "machine learning", "deep learning", "tensorflow", "pytorch"],
+      "Software Development": ["java", "c++", "javascript", "react", "node.js"],
+      "Web Development": ["html", "css", "javascript", "react", "node.js"],
+      "Cloud Computing": ["aws", "azure", "docker", "kubernetes", "linux"],
+      "Cyber Security": ["ethical hacking", "penetration testing", "cryptography", "linux"],
+      "Business Analytics": ["excel", "sql", "power bi", "tableau", "statistics"],
+      "DevOps": ["docker", "kubernetes", "jenkins", "linux", "aws"],
+      "Mobile App Development": ["flutter", "dart", "android", "kotlin", "firebase"],
+      "UI/UX Design": ["figma", "adobe xd", "wireframing", "prototyping"]
+    };
+
+    const atsFormatTemplates = [
+      {
+        name: 'Template 1',
+        keywords: [
+          'summary',
+          'professional experience',
+          'education',
+          'technical skills',
+          'additional information',
+          'awards',
+          'languages',
+          'certificates'
+        ]
+      },
+      {
+        name: 'Template 2',
+        keywords: [
+          'summary',
+          'skills',
+          'work experience',
+          'education',
+          'certifications',
+          'training',
+          'achievements'
+        ]
+      },
+      {
+        name: 'Template 3',
+        keywords: [
+          'summary',
+          'experience',
+          'education',
+          'technical skills',
+          'certifications and training',
+          'achievements',
+          'projects'
+        ]
+      },
+      {
+        name: 'Template 4',
+        keywords: [
+          'summary',
+          'skills',
+          'work experience',
+          'education',
+          'certifications',
+          'achievements',
+          'personal website'
+        ]
+      },
+      {
+        name: 'Template 5',
+        keywords: [
+          'summary',
+          'skills',
+          'work experience',
+          'education',
+          'certifications',
+          'achievements',
+          'additional information'
+        ]
+      }
+    ];
+
+    const allATSKeywords = Array.from(new Set(atsFormatTemplates.flatMap(format => format.keywords)));
+
+    let currentResults = {};
+
+    async function extractPDFText(file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let text = "";
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(item => item.str).join(" ") + " ";
+      }
+
+      return text.toLowerCase();
+    }
+
+    function extractSkills(text) {
+      return skillsList.filter(skill => text.includes(skill));
+    }
+
+    function predictDomain(skills) {
+      let bestDomain = "General Technology";
+      let maxScore = 0;
+
+      for (const domain in domainSkills) {
+        let score = domainSkills[domain].filter(skill => skills.includes(skill)).length;
+
+        if (score > maxScore) {
+          maxScore = score;
+          bestDomain = domain;
+        }
+      }
+
+      return bestDomain;
+    }
+
+    function scoreFormatTemplate(template, lowerText) {
+      const matched = template.keywords.filter(keyword => lowerText.includes(keyword));
+      const score = Math.round((matched.length / template.keywords.length) * 100);
+      return { name: template.name, score, matchedCount: matched.length, total: template.keywords.length };
+    }
+
+    function analyzeATSFormat(text) {
+      const lowerText = text.toLowerCase();
+      const templateScores = atsFormatTemplates.map(template => scoreFormatTemplate(template, lowerText));
+      const bestTemplate = templateScores.reduce((best, current) => current.score > best.score ? current : best, templateScores[0]);
+      const combinedMatches = allATSKeywords.filter(keyword => lowerText.includes(keyword)).length;
+      const combinedScore = Math.round((combinedMatches / allATSKeywords.length) * 100);
+      const passed = bestTemplate.score >= 90 || combinedScore >= 90;
+
+      return {
+        templateScores,
+        bestTemplate,
+        combinedScore,
+        passed,
+        score: Math.max(bestTemplate.score, combinedScore)
+      };
+    }
+
+    async function analyzeResume() {
+
+      const fileInput = document.getElementById('resume');
+      const jdText = document.getElementById('jobDescription').value.toLowerCase();
+
+      if (!fileInput.files.length) {
+        alert('Please upload a resume PDF');
+        return;
+      }
+
+      const resumeText = await extractPDFText(fileInput.files[0]);
+
+      const resumeSkills = extractSkills(resumeText);
+      const jdSkills = extractSkills(jdText);
+
+      const matched = jdSkills.filter(skill => resumeSkills.includes(skill));
+      const missing = jdSkills.filter(skill => !resumeSkills.includes(skill));
+
+      const skillScore = jdSkills.length
+        ? Math.round((matched.length / jdSkills.length) * 100)
+        : 0;
+
+      const formatResult = analyzeATSFormat(resumeText);
+      const overallScore = Math.round((skillScore + formatResult.score) / 2);
+      const formatStatusClass = formatResult.passed ? 'status-pass' : 'status-fail';
+
+      document.getElementById('results').style.display = 'block';
+
+      document.getElementById('score').innerText = overallScore + '%';
+      document.getElementById('formatScore').innerText = formatResult.score + '%';
+      document.getElementById('matchedCount').innerText = matched.length;
+      document.getElementById('missingCount').innerText = missing.length;
+
+      document.getElementById('predictedDomain').innerHTML =
+        `Candidate is best suited for <strong>${predictDomain(resumeSkills)}</strong> roles based on extracted technical skills and ATS analysis.`;
+
+      document.getElementById('skills').innerText =
+        resumeSkills.join(', ') || 'No skills detected';
+
+      document.getElementById('matchedSkills').innerText =
+        matched.join(', ') || 'No matched skills';
+
+      document.getElementById('atsFormatResult').innerHTML =
+        `<span class="${formatStatusClass}">${formatResult.passed ? 'ATS Format Passed' : 'ATS Format Not Passed'}</span>`;
+
+      document.getElementById('atsFormatTip').innerHTML =
+        (formatResult.passed
+          ? 'Your resume layout is strong. You can refer this ATS format and use the sample structure for a clean resume design.'
+          : 'Your resume layout is missing key ATS-friendly sections. Use the sample format for a clearer structure and better parsing.') +
+        '<br /><br /><a href="../Ats_Final_Resume_Format.pdf" download="Ats_Final_Resume_Format.pdf">Download sample ATS format</a>';
+
+      document.getElementById('missingSkills').innerText =
+        missing.join(', ') || 'No missing skills';
+
+      document.getElementById('suggestions').innerHTML =
+        missing.length
+          ? `To improve your ATS score, consider learning these skills:<br><br><strong>${missing.join(', ')}</strong>`
+          : 'Excellent! Your resume matches most required skills.';
+
+      currentResults = {
+        score: overallScore,
+        skillScore,
+        matched,
+        missing,
+        predictedDomain: predictDomain(resumeSkills),
+        atsFormat: formatResult
+      };
+
+      renderChart(matched.length, missing.length);
+    }
+
+    let chartInstance;
+
+    function renderChart(matched, missing) {
+
+      const ctx = document.getElementById('chart');
+
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Matched Skills', 'Missing Skills'],
+          datasets: [{
+            data: [matched, missing],
+            backgroundColor: ['#fbcfe8', '#93c5fd'],
+            borderColor: ['#f472b6', '#60a5fa'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#0f172a',
+                font: {
+                  size: 14,
+                  weight: '600'
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    async function downloadPDF() {
+
+      const { jsPDF } = window.jspdf;
+
+      const doc = new jsPDF();
+
+      doc.setFontSize(20);
+      doc.text('ATS Resume Analysis Report', 20, 20);
+
+      doc.setFontSize(13);
+
+      doc.text(`ATS Match Score: ${currentResults.score}%`, 20, 50);
+      doc.text(`Predicted Domain: ${currentResults.predictedDomain}`, 20, 70);
+
+      doc.text('Matched Skills:', 20, 100);
+      doc.text(currentResults.matched.join(', '), 20, 110, { maxWidth: 170 });
+
+      doc.text('Missing Skills:', 20, 140);
+      doc.text(currentResults.missing.join(', '), 20, 150, { maxWidth: 170 });
+
+      doc.text(`ATS Format Score: ${currentResults.atsFormat.score}%`, 20, 180);
+      doc.text(`ATS Format Result: ${currentResults.atsFormat.passed ? 'Passed' : 'Not Passed'}`, 20, 190);
+      doc.text(`Best Format Match: ${currentResults.atsFormat.bestTemplate.name}`, 20, 210);
+
+      doc.save('ATS_Report.pdf');
+    }
+
+  </script>
+
+</body>
+</html>

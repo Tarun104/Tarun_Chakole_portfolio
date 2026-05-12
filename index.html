@@ -121,6 +121,33 @@
         .btn-accent { background: var(--accent); }
         .btn-danger { background: #ff9aa2; font-size: 0.8rem; padding: 8px; }
 
+        .project-card {
+            background: linear-gradient(180deg, #ffffff 0%, #fdf9ff 100%);
+            border: 1px solid #f0e9ff;
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 14px 32px rgba(79, 70, 229, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .project-card h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.25rem;
+            color: #3b21a1;
+            margin-bottom: 0.65rem;
+        }
+
+        .project-card p {
+            font-size: 0.95rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+            line-height: 1.55;
+        }
+
+        .project-card .btn {
+            width: 100%;
+        }
+
         /* Sticker Grid */
         .sticker-grid {
             display: grid;
@@ -191,7 +218,13 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h1>Sticker Studio ✨</h1>
-            
+
+            <div class="project-card">
+                <h2>AI Resume Analyzer</h2>
+                <p>Try the AI Resume Analyzer demo to review resumes, match skills to job descriptions, and share a polished ATS-ready report.</p>
+                <a class="btn btn-primary" href="docs/ai_resume_analyzer_demo.html" target="_blank">Use Demo</a>
+            </div>
+
             <div class="control-group">
                 <label>Background Color</label>
                 <input type="color" id="bgColor" value="#ffffff">
